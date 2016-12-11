@@ -188,6 +188,7 @@ Status PrintTopLabels(const std::vector<Tensor>& outputs,
                       string labels_file_name) {
   std::vector<string> labels;
   size_t label_count;
+  int32 output_probs;
   Status read_labels_status =
       ReadLabelsFile(labels_file_name, &labels, &label_count);
   if (!read_labels_status.ok()) {
