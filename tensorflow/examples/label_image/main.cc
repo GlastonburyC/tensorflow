@@ -194,7 +194,7 @@ Status PrintTopLabels(const std::vector<Tensor>& outputs,
     LOG(ERROR) << read_labels_status;
     return read_labels_status;
   }
-  const int how_many_labels = std::min(5, static_cast<int>(label_count));
+  const int how_many_labels = std::min(output_probs, static_cast<int>(label_count));
   Tensor indices;
   Tensor scores;
   TF_RETURN_IF_ERROR(GetTopLabels(outputs, how_many_labels, &indices, &scores));
@@ -248,6 +248,7 @@ int main(int argc, char* argv[]) {
   string output_layer = "softmax";
   bool self_test = false;
   string root_dir = "";
+  int32 output_probs =5;
   std::vector<Flag> flag_list = {
       Flag("image", &image, "image to be processed"),
       Flag("graph", &graph, "graph to be executed"),
@@ -262,6 +263,8 @@ int main(int argc, char* argv[]) {
       Flag("self_test", &self_test, "run a self test"),
       Flag("root_dir", &root_dir,
            "interpret image and graph file names relative to this directory"),
+      Flag("output_probs", &output_probs,
+           "Number of output probabilities to display for each test image"),
   };
   string usage = tensorflow::Flags::Usage(argv[0], flag_list);
   const bool parse_result = tensorflow::Flags::Parse(&argc, argv, flag_list);
